@@ -32,7 +32,7 @@ class JumpToView extends StatelessWidget with $JumpToView {
       builder: (BuildContext context, JumpToViewModel model, Widget? child) =>
           ScreenUtilInit(
         designSize: const Size(411, 823),
-        builder: () => Scaffold(
+        builder: (context, widget) => Scaffold(
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Padding(

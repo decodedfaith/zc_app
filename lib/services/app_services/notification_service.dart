@@ -47,11 +47,13 @@ class NotificationService {
           )
         ]);
 
-    AwesomeNotifications().actionStream.listen((receivedNotifiction) {
-      //var payload = NotificationPayload._fromMap(receivedNotifiction.payload);
-      //_notificationControl.sink.add(payload);
+
+    //TODO: Fix deprecadated method [actionStream on AwesomeNotifications class]
+    // AwesomeNotifications().actionStream.listen((receivedNotifiction) {
+    //   //var payload = NotificationPayload._fromMap(receivedNotifiction.payload);
+    //   //_notificationControl.sink.add(payload);
       _navigationService.navigateTo(Routes.homePage);
-    });
+    // });
   }
 
   void show({

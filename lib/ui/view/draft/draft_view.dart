@@ -8,20 +8,25 @@ import 'draft_viewmodel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DraftView extends StatelessWidget {
+class DraftView extends StatefulWidget {
   const DraftView({Key? key}) : super(key: key);
 
   @override
+  State<DraftView> createState() => _DraftViewState();
+}
+
+class _DraftViewState extends State<DraftView> with TickerProviderStateMixin{
+  @override
   Widget build(BuildContext context) {
     final local = AppLocalization.of(context);
-    var controller = SlidableController();
+    var controller = SlidableController(this);
     return ViewModelBuilder<DraftViewModel>.reactive(
       onModelReady: (model) {
         model.drafts;
       },
       builder: (context, model, child) => ScreenUtilInit(
         designSize: const Size(411, 823),
-        builder: () => Scaffold(
+        builder: (context, widget) => Scaffold(
           appBar: ZuriAppBar(
             whiteBackground: true,
             leading: Icons.arrow_back_ios,
@@ -42,34 +47,34 @@ class DraftView extends StatelessWidget {
                       parent: AlwaysScrollableScrollPhysics()),
                   itemBuilder: (BuildContext context, int index) {
                     return Slidable(
-                      controller: controller,
                       closeOnScroll: true,
                       key: Key(model.widgetBuilderList[index].subtitle),
-                      dismissal: SlidableDismissal(
-                        child: const SlidableDrawerDismissal(),
-                        key: Key(model.widgetBuilderList[index].subtitle),
-                        closeOnCanceled: true,
-                        onWillDismiss: (type) {
-                          return model
-                              .showDeleteDraftDialog(index)
-                              .then((onValue) {
-                            controller.activeState!.close();
-                          });
-                        },
-                      ),
-                      actionPane: const SlidableDrawerActionPane(),
-                      actionExtentRatio: 0.35.sp,
-                      secondaryActions: [
-                        IconSlideAction(
-                          caption: local.delete,
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          onTap: () {
-                            model.showDeleteDraftDialog(index);
-                          },
-                          closeOnTap: true,
-                        )
-                      ],
+                      //TODO: @decodedfaith... fix deprecated params and the implementation made within
+                      // dismissal: SlidableDismissal(
+                      //   child: const SlidableDrawerDismissal(),
+                      //   key: Key(model.widgetBuilderList[index].subtitle),
+                      //   closeOnCanceled: true,
+                      //   onWillDismiss: (type) {
+                      //     return model
+                      //         .showDeleteDraftDialog(index)
+                      //         .then((onValue) {
+                      //       controller.activeState!.close();
+                      //     });
+                      //   },
+                      // ),
+                      // actionPane: const SlidableDrawerActionPane(),
+                      // actionExtentRatio: 0.35.sp,
+                      // secondaryActions: [
+                      //   IconSlideAction(
+                      //     caption: local.delete,
+                      //     color: Colors.red,
+                      //     icon: Icons.delete,
+                      //     onTap: () {
+                      //       model.showDeleteDraftDialog(index);
+                      //     },
+                      //     closeOnTap: true,
+                      //   )
+                      // ],
                       child: CustomListTile(
                         text: model.widgetBuilderList[index].text,
                         subtitle: model.widgetBuilderList[index].subtitle,

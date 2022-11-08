@@ -33,20 +33,17 @@ class CentrifugeService with ReactiveServiceMixin {
     _instance ??= CentrifugeService();
 
     _client = centrifuge.createClient('$websocketUrl?format=protobuf',
-        config: ClientConfig(
-          debug: true,
-          retry: (int rty) {
-            log.w("Retry Count - $rty");
-          },
+        ClientConfig(
+        
         ));
 
     final connectData = utf8.encode(json.encode({"bearer": token}));
 
-    _client.setConnectData(connectData);
+    _client.send(connectData);
 
-// _client.setConnectData([2]);
-    _client.connectStream.listen(_showLog);
-    _client.disconnectStream.listen(_showLog);
+    _client.send([2]);
+    _client.connected.listen(_showLog);
+    _client.disconnected.listen(_showLog);
 
     _client.connect();
 
@@ -127,19 +124,19 @@ class CentrifugeService with ReactiveServiceMixin {
     }
     Subscription? subscription = _client.getSubscription(channelSocketId);
 
-    subscription.subscribeErrorStream.listen(_showError);
-    subscription.subscribeSuccessStream.listen(_showLog);
-    subscription.unsubscribeStream.listen(_showLog);
+    subscription!.error.listen(_showError);
+    subscription.subscribed.listen(_showLog);
+    subscription.unsubscribed.listen(_showLog);
 
-    subscription.joinStream.listen((event) {
+    subscription.join.listen((event) {
       log.i('Subcribe join stream $event');
     });
 
-    subscription.leaveStream.listen((event) {
+    subscription.leave.listen((event) {
       log.i('Subcribe leave stream $event');
     });
 
-    subscription.publishStream.listen((event) {
+    subscription.publication.listen((event) {
       Map userMessage = json.decode(utf8.decode(event.data));
       _showLog("CENTRIFUGE RTC EVENT OUTPUT $userMessage");
 

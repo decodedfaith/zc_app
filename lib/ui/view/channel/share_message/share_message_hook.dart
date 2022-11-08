@@ -30,7 +30,7 @@ class ShareMessageHook extends HookViewModelWidget<ShareMessageViewModel> {
         UIHelper.verticalSpaceMedium,
         ShareMessageTextField(
             controller: controller,
-            onChanged: (String value) => viewModel.message = value,
+            onChanged: (String value) => viewModel.oneMessage = value,
             hintText: EnterMessage),
         UIHelper.customVerticalSpace(10),
         Row(

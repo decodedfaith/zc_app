@@ -43,7 +43,7 @@ class ChannelInfoView extends StatelessWidget {
       disposeViewModel: false,
       builder: (context, model, child) => ScreenUtilInit(
           designSize: const Size(411, 823),
-          builder: () {
+          builder: (context, widget) {
             return Scaffold(
               appBar: ZuriAppBar(
                 leading: Icons.clear,
